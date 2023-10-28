@@ -1,0 +1,14 @@
+---
+- name: Install Git
+  apt:
+    name: git
+    state: present
+  when: ansible_os_family == 'Debian'
+  
+- name: Configure Git user email
+  command: git config --global user.email "your.email@example.com"
+  become: yes
+
+- name: Configure Git user name
+  command: git config --global user.name "Your Name"
+  become: yes

@@ -1,0 +1,42 @@
+---
+- name: Install NFS client packages
+  become: true
+  apt:
+    name: nfs-common
+    state: present
+
+- name: Create the media mount point directory
+  file:
+    path: "{{ nfs_mount_point_media }}"
+    state: directory
+
+- name: Create the backups mount point directory
+  file:
+    path: "{{ nfs_mount_point_backups }}"
+    state: directory
+
+- name: Mount the media NFS share
+  mount:
+    path: "{{ nfs_mount_point_media }}"
+    src: "{{ nfs_server }}:/volume1/media"
+    fstype: nfs
+    state: mounted
+
+- name: Mount the backups NFS share
+  mount:
+    path: "{{ nfs_mount_point_backups }}"
+    src: "{{ nfs_server }}:/volume1/backups"
+    fstype: nfs
+    state: mounted
+
+- name: Add media NFS share to /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "{{ nfs_server }}:/volume1/media {{ nfs_mount_point_media }} nfs defaults 0 0"
+  notify: Reload fstab
+
+- name: Add backup NFS share to /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "{{ nfs_server }}:/volume1/backups {{ nfs_mount_point_backups }} nfs defaults 0 0"
+  notify: Reload fstab

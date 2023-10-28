@@ -1,0 +1,7 @@
+---
+- name: Setup media servers
+  hosts: media
+  become: yes
+  roles:
+    - nfs_client
+    - docker_host

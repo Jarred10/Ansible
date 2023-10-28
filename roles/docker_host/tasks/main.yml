@@ -1,0 +1,58 @@
+---
+- name: Update apt package cache
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install required packages
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+    state: present
+  become: yes
+
+- name: Add Docker GPG key
+  apt_key:
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    keyserver: keyserver.ubuntu.com
+  become: yes
+
+- name: Add Docker repository
+  apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+    state: present
+  become: yes
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: present
+  become: yes
+
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Create Docker group
+  group:
+    name: docker
+    state: present
+  become: yes
+
+- name: Add user to Docker group
+  user:
+    name: jarred
+    groups: docker
+    append: yes
+  become: yes
+
+- name: Create a Bash alias
+  lineinfile:
+    path: ~/.bashrc
+    line: "alias dcup='docker compose up -d'"
+    insertafter: EOF
+    state: present
+  become: yes
+  become_user: jarred
