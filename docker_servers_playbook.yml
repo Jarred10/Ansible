@@ -1,0 +1,12 @@
+---
+- name: Setup media servers
+  hosts: docker_servers
+  vars_files:
+    - vault.yml
+  vars:
+    ansible_become_pass: '{{ ansible_become_pass }}'
+  become: yes
+  roles:
+    - nfs_client
+    - docker_server
+    - git_client

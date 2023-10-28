@@ -1,0 +1,9 @@
+---
+- name: Set Nano as editor
+  lineinfile:
+    path: ~/.bashrc
+    line: "export EDITOR=nano"
+    insertafter: EOF
+    state: present
+  become: yes
+  become_user: jarred

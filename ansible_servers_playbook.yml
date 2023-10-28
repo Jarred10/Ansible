@@ -1,0 +1,11 @@
+---
+- name: Setup Ansible servers
+  hosts: ansible_servers
+  vars_files:
+    - vault.yml
+  vars:
+    ansible_become_pass: '{{ ansible_become_pass }}'
+  become: yes
+  roles:
+    - ansible_server
+    - git_client
