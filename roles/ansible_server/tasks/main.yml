@@ -7,3 +7,10 @@
     state: present
   become: yes
   become_user: jarred
+
+- name: Schedule the rsync job in cron
+  cron:
+    name: "rsync_{{ ansible_hostname }}"
+    minute: "0"
+    hour: "0,6,12,18"
+    job: "rsync -avz /home/jarred/ansible/ /mnt/nas/backups/{{ ansible_hostname }}"

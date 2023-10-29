@@ -13,3 +13,8 @@
         key: "{{ lookup('file', '/home/jarred/.ssh/id_rsa.pub') }}"
         state: present
       become: yes
+    - name: Install tree
+      apt:
+        name: tree
+        state: present
+      become: yes

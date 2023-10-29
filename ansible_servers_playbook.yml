@@ -9,3 +9,4 @@
   roles:
     - ansible_server
     - git_client
+    - nfs_client
