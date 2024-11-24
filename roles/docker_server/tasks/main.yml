@@ -57,9 +57,19 @@
   become: yes
   become_user: jarred
 
+- name: Create the log folder
+  file:
+    path: "/home/jarred/log"
+    state: directory
+
+- name: Create the cronlog file
+  file:
+    path: "/home/jarred/log/cronlog"
+    state: touch
+
 - name: Schedule the rsync job in cron
   cron:
     name: "rsync_{{ ansible_hostname }}"
     minute: "0"
     hour: "0,6,12,18"
-    job: "rsync -avz /home/jarred/docker/ /mnt/nas/backups/{{ ansible_hostname }}"
+    job: "rsync -avz /home/jarred/ansible/ /mnt/nas/backups/{{ ansible_hostname }} >> /home/jarred/log/cronlog" 
